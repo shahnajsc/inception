@@ -1,0 +1,32 @@
+## version: '3.8'
+
+services:
+  mariadb:
+    build:
+      context: ./requirements/mariadb/
+      dockerfile: Dockerfile
+    #image: ${USER}:nginx //only if pulling from Docker Hub (which your project forbids).
+    env_file: .env
+    volumes:
+      - db:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - inception_net
+    restart: always
+    container_name: mariadb_container
+
+    # build: requirements/nginx/.
+
+networks:
+  inception_net:
+    driver: bridge
+
+volumes:
+  db:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/shachowd/data/db
+      o: bind
+
