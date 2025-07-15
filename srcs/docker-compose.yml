@@ -1,25 +1,41 @@
-## version: '3.8'
-
 services:
   mariadb:
+    container_name: mariadb_cont
+    image: #imageName Usually this images is overridden by the below build
+    restart: always
+    env_file: .env # Environment variables for setting DB strored in .env file
     build:
       context: ./requirements/mariadb/
       dockerfile: Dockerfile
-    #image: ${USER}:nginx //only if pulling from Docker Hub (which your project forbids).
-    env_file: .env
     volumes:
       - db:/var/lib/mysql
     ports:
       - "3306:3306"
     networks:
-      - inception_net
-    restart: always
-    container_name: mariadb_container
+      - inception
 
-    # build: requirements/nginx/.
+
+  wordpress:
+    container_name: wordpress_cont
+    image: #imageName  Usually this images is overridden by the below build
+    restart: always
+    env_file: .env
+    build:
+      context: ./requirements/wordpress/
+      dockerfile: Dockerfile
+    depends_on:
+      - mariadb
+    volumes:
+      - wp:/var/www/html
+    ports:
+      - "9000:80" # need to change
+    networks:
+      - inception
+
+
 
 networks:
-  inception_net:
+  inception:
     driver: bridge
 
 volumes:
@@ -29,4 +45,11 @@ volumes:
       type: none
       device: /home/shachowd/data/db
       o: bind
+  wp:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/shachowd/data/wp
+      o: bind
+
 

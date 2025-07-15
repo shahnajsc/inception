@@ -10,8 +10,8 @@ RUN apk update && \
 	## which mariadb-install-db        ls /usr/bin | grep install_db
 
 #Copying :: Copies config file and startup script into the image
-COPY conf/mariadb-server.cnf /etc/my.cnf.d
-COPY tools/databaseEntrypoint.sh /usr/local/bin
+COPY conf/mariadb.cnf /etc/my.cnf.d
+COPY tools/DBEntrypoint.sh /usr/local/bin
 
 #VOLUME :: Persist database data
 # better option to define in compose as it can be nammed, manageable (ls, rm..)
@@ -21,7 +21,7 @@ COPY tools/databaseEntrypoint.sh /usr/local/bin
 EXPOSE 3306
 
 #Entrypoint script permission :: Makes script executable
-RUN chmod +x /usr/local/bin/databaseEntrypoint.sh
+RUN chmod +x /usr/local/bin/DBEntrypoint.sh
 
 #Entrypoint script :: Defines what should run when container starts
-ENTRYPOINT ["/usr/local/bin/databaseEntrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/DBEntrypoint.sh"]
