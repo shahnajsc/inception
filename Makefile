@@ -1,37 +1,41 @@
 DATA_DIR 		= /home/shachowd/data
-MYSQL_DIR 		= $(DATA_DIR)/db
+DB_DIR 		= $(DATA_DIR)/db
 WP_DIR 			= $(DATA_DIR)/wp
 
-COMPOSE_FILE 	= ./srcs/docker-compose.yml
+DOCKER_COMPOSE_FILE 	= ./srcs/docker-compose.yml
 ENV_FILE 		= ./srcs/.env
-DC 				= docker compose --env-file $(ENV_FILE) --file $(COMPOSE_FILE)
+D_COMPOSE 				= docker compose --env-file $(ENV_FILE) --file $(DOCKER_COMPOSE_FILE)
 
 all: up
 
 mkdirs:
-	@mkdir -p $(MYSQL_DIR) $(WP_DIR)
+	@mkdir -p $(DB_DIR) $(WP_DIR)
+	echo -e "$(PINK)Wordpress and MariaDB data directory created..$(RESET)"
 
 check:
-	command -v docker >/dev/null 2>&1 || { echo "$(RED)Error: Docker is not installed.$(RESET)"; exit 1; }
-	command -v docker-compose >/dev/null 2>&1 || command -v docker >/dev/null 2>&1 || { echo "$(RED)Error: Docker Compose is not installed.$(RESET)"; exit 1; }
+	command -v docker >/dev/null 2>&1 || { echo "$(RED)Docker is not installed.$(RESET)"; exit 1; }
+	command -v docker-compose >/dev/null 2>&1 || command -v docker >/dev/null 2>&1 || { echo "$(RED)Docker Compose is not installed.$(RESET)"; exit 1; }
 
 up: mkdirs check
-	$(DC) up --build -d
+	$(D_COMPOSE) up --build -d
 	echo -e "$(GREEN)All services are up and running.$(RESET)"
 
 down:
-	$(DC) down
+	$(D_COMPOSE) down
+	echo -e "$(RED)All services are stopped and removed.$(RESET)"
 
 stop:
-	$(DC) stop
+	$(D_COMPOSE) stop
+	echo -e "$(RED)All services are stopped..$(RESET)"
 
 start:
-	$(DC) start
+	$(D_COMPOSE) start
+	echo -e "$(GREEN)All services are running.$(RESET)"
 
 re: fclean all
 
 logs:
-	$(DC) logs --f
+	$(D_COMPOSE) logs --f
 
 clean: down
 	@sudo rm -rf $(DATA_DIR)
@@ -39,15 +43,12 @@ clean: down
 fclean: clean
 	docker system prune --all --volumes --force
 
-help:
-	echo "Available targets:"
-	echo "  all, up      Build and start containers"
-	echo "  down         Stop containers"
-	echo "  ps           Show container status"
-	echo "  logs         Show container logs"
-	echo "  clean        Stop containers and remove data directories"
-	echo "  fclean       Remove all Docker data and volumes"
-	echo "  re           Rebuild everything"
-	echo "  help         Show this help message"
+
+# color
+RED			= \033[0;31m
+GREEN		= \033[0;32m
+PINK		= \033[0;35m
+RESET		= \033[0;36m
 
 .PHONY : all up down stop start re logs clean fclean mkdirs
+

@@ -14,7 +14,6 @@ services:
     networks:
       - inception
 
-
   wordpress:
     container_name: wordpress_cont
     image: #imageName  Usually this images is overridden by the below build
@@ -31,8 +30,6 @@ services:
       - "9000:80" # need to change
     networks:
       - inception
-
-
 
 networks:
   inception:
