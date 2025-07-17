@@ -1,0 +1,86 @@
+NGINX OPENSSL
+
+# openssl req: create a SSL (Secure Sockets Layer certificate)
+#	-x509: create X.509 certificate.
+#	-days 365: valid for 365 days.
+#	-newkey rsa:2048: generate a new 2048-bit RSA key.
+#	-nodes: do not encrypt the private key.
+#	-keyout: output file for private key.
+#	-out: output file for certificate.
+#	-subj: set the certificate subject (Common Name) from $DOMAIN_NAME.
+
+
+	# TLS1.3: [TLS]_[Encryption_Algo]_[Auth]: [TLS]_[AES_256_GCM]_[SHA384]
+	# TLS1.2: [Key-Exhcnage]-[Encryption-Algo]-[Auth]: [ECDHE-RSA]-[AES256-GCM]-[SHA384]
+
+
+
+##############_____Evaluation Commands____##################
+
+
+#Transfer files from local to remote host:
+	#- scp -P 4241 -r /home/tmenkovi/inception_eval tmenkovi@localhost:/home/shachowd/
+#Clean up Docker by stopping, removing, and deleting all containers, images, volumes and networks:
+	#- docker stop $(docker ps -qa); docker rm $(docker ps -qa);
+	#- docker rmi -f $(docker images -qa); docker volume rm $(docker volume ls -q); docker network rm $(docker network ls -q) 2>/dev/null
+#View the whole Inception installation and configuration process with messages:
+	#-cd srcs
+	#- docker-compose up --build
+#See running containers:
+	#- docker ps
+#See logs for a specific container (example for mariadb):
+	#- docker logs mariadb
+	#OR
+	#- cd ./srcs | docker-compose logs mariadb
+#To inspect the network:
+	#- docker network inspect docker-network
+#Verify correct usage of Docker daemon:
+	#-docker exec -it container-name ps aux #PID 1 cannot be any of these: bash, sh, sleep
+#Check Docker volume info:
+	#-docker volume ls
+	#-docker volume inspect volume-name
+
+
+##Mariadb##
+#Access MariaDB container's shell:
+	#- docker exec -it mariadb sh
+#Enter mariaDB client inside the container:
+	#- mysql -u root -p
+	#- After this type password for mysql.
+
+#Check what databases exist:
+	#- SHOW DATABASES;
+#Check if mysql user exists (.env) and the priviledges granted to it:
+	#- SELECT User, Host FROM mysql.user;
+	#- SHOW GRANTS FOR tanjaaa;
+#Check that WordPress tables are set up:
+	#-USE wordpress_db;
+	#-SHOW TABLES;
+#Verify WordPress content (examples):
+	#-SELECT * FROM wp_users;
+
+
+##Wordpress:##
+#check if php-fpm is running inside the container
+	#-docker exec -it wordpress ps aux | grep php-fpm
+#check if you can connect to MariaDB from WordPress
+	#-docker exec -it wordpress sh
+	#- mysql -h mariadb -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE"
+	#OR
+	#- mysql -h mariadb -u tanjaaa -p
+
+
+##Nginx:##
+#*check the validity of the SSL certificate:
+
+	#-docker exec -it container_id_or_name sh
+	#- openssl s_client -connect user.42.fr:443
+#check if Nginx is actually listening to port 443 inside the container:
+	#-docker exec -it container-name netstat -tlnp
+#test the same thing on host:
+	#- docker inspect container-name | grep "443" # if "HostPort": "443" is missing, game over
+	#- check the TLS and http/https access inside the container:
+	#- docker exec -it container-name-or-id
+	#- curl -k http://user.42.fr # should fail
+	#- curl -k https://user.42.fr # should display a html document
+	#- curl -v https://user.42.fr # display TLS info

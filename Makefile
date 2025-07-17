@@ -1,10 +1,10 @@
-DATA_DIR 		= /home/shachowd/data
-DB_DIR 		= $(DATA_DIR)/db
-WP_DIR 			= $(DATA_DIR)/wp
+DATA_DIR			= /home/shachowd/data
+DB_DIR				= $(DATA_DIR)/db
+WP_DIR				= $(DATA_DIR)/wp
 
-DOCKER_COMPOSE_FILE 	= ./srcs/docker-compose.yml
-ENV_FILE 		= ./srcs/.env
-D_COMPOSE 				= docker compose --env-file $(ENV_FILE) --file $(DOCKER_COMPOSE_FILE)
+DOCKER_COMPOSE_FILE	= ./srcs/docker-compose.yml
+ENV_FILE			= ./srcs/.env
+D_COMPOSE	= docker compose --env-file $(ENV_FILE) --file $(DOCKER_COMPOSE_FILE)
 
 all: up
 
@@ -15,9 +15,10 @@ mkdirs:
 check:
 	command -v docker >/dev/null 2>&1 || { echo "$(RED)Docker is not installed.$(RESET)"; exit 1; }
 	command -v docker-compose >/dev/null 2>&1 || command -v docker >/dev/null 2>&1 || { echo "$(RED)Docker Compose is not installed.$(RESET)"; exit 1; }
+	echo -e "$(PINK)Docker and Docker Compose is available$(RESET)"
 
 up: mkdirs check
-	$(D_COMPOSE) up --build -d
+	@$(D_COMPOSE) up --build -d
 	echo -e "$(GREEN)All services are up and running.$(RESET)"
 
 down:
@@ -43,6 +44,18 @@ clean: down
 fclean: clean
 	docker system prune --all --volumes --force
 
+info:
+	@echo "===============================| IMAGES |==============================="
+	@docker images
+	@echo
+	@echo "=============================| CONTAINERS |============================="
+	@docker ps -a
+	@echo
+	@echo "===============| NETWORKS |==============="
+	@docker network ls
+	@echo
+	@echo "======| VOLUMES |======"
+	@docker volume ls
 
 # color
 RED			= \033[0;31m

@@ -38,7 +38,7 @@ else
 	echo "MariaDB already initialized. Skipping bootstrap."
 fi
 
-# Start MariaDB in the foregroundWw
+# Start MariaDB in the foreground
 echo "Starting MariaDB server..."
 exec mariadbd --user=mysql --console
 

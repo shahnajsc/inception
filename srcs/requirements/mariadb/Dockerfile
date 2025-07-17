@@ -9,7 +9,7 @@ RUN apk update && \
 	mysql_install_db --user=mysql --datadir=/var/lib/mysql
 	## which mariadb-install-db        ls /usr/bin | grep install_db
 
-#Copying :: Copies config file and startup script into the image
+#Copy :: Copies config file and startup script into the image
 COPY conf/mariadb.cnf /etc/my.cnf.d
 COPY tools/DBEntrypoint.sh /usr/local/bin
 
