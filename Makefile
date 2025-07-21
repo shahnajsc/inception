@@ -1,4 +1,4 @@
-DATA_DIR			= /home/shachowd/data
+DATA_DIR			= /Users/shahnaj/data
 DB_DIR				= $(DATA_DIR)/db
 WP_DIR				= $(DATA_DIR)/wp
 
@@ -36,7 +36,7 @@ start:
 re: fclean all
 
 logs:
-	$(D_COMPOSE) logs --f
+	$(D_COMPOSE) logs --follow
 
 clean: down
 	@sudo rm -rf $(DATA_DIR)

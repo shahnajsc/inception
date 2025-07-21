@@ -10,7 +10,7 @@ RUN apk update && \
 	## which mariadb-install-db        ls /usr/bin | grep install_db
 
 #Copy :: Copies config file and startup script into the image
-COPY conf/mariadb.cnf /etc/my.cnf.d
+COPY conf/mariadb.cnf /etc/my.cnf.d/
 COPY tools/DBEntrypoint.sh /usr/local/bin
 
 #VOLUME :: Persist database data

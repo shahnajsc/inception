@@ -54,18 +54,16 @@ networks:
 
 volumes:
   db:
-    name: DB_Volume
+    #name: DB_Volume
     driver: local
     driver_opts:
       type: none
-      device: /home/shachowd/data/db
+      device: /Users/shahnaj/data/db
       o: bind
   wp:
-    name: WP_Volume
+    #name: WP_Volume
     driver: local
     driver_opts:
       type: none
-      device: /home/shachowd/data/wp
+      device: /Users/shahnaj/data/wp
       o: bind
-
-

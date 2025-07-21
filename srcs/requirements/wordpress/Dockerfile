@@ -21,8 +21,8 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 	chmod +x wp-cli.phar
 
 #Copy :: Copies config file and startup script into the image
-COPY conf/www.conf /etc/php83/php-fpm.d
-COPY tools/WPEntrypoint.sh /usr/local/bin
+COPY conf/www.conf /etc/php83/php-fpm.d/
+COPY tools/WPEntrypoint.sh /usr/local/bin/
 
 #Port :: Allow external services to connect
 EXPOSE 9000

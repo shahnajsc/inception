@@ -21,18 +21,25 @@ echo "Starting Wordpress initialization script..."
 : "${DB_USER:?Environment variable DB_USER is required}"
 : "${DB_PASS:?Environment variable DB_PASS is required}"
 
-cd /var/www/html
+echo "Data Availability check done..."
 
-if [ ! -e .firstmount]; then
+cd /var/www/html
+echo "Got in to echo /var/www/html/..."
+
+if [ ! -e .firstmount ]; then
+	echo "Starting mariadb ping..."
 	mariadb-admin ping --protocol=tcp --host=mariadb -u$DB_USER -p$DB_PASS --wait >/dev/null 2>/dev/null
 
-	if [ ! -f wp-config.php]; then
+	echo "Ping done..."
+	if [ ! -f wp-config.php ]; then
+		echo "wp-config creating..."
 		./wp-cli.phar core download --allow-root || true
 		./wp-cli.phar config create --allow-root \
 			--dbname="$DB_NAME" \
 			--dbuser="$DB_USER" \
 			--dbpass="$DB_PASS" \
 			--dbhost="$DB_HOST"
+		echo "DB USSER Assigned..."
 		./wp-cli.phar core install --allow-root \
 			--skip-email \
 			--url="$DOMAIN_NAME" \
@@ -40,15 +47,19 @@ if [ ! -e .firstmount]; then
 			--admin_user="$WP_ADMIN_USER" \
 			--admin_password="$WP_ADMIN_PASS" \
 			--admin_email="$WP_ADMIN_EMAIL"
+		echo "other user creating..."
 		./wp-cli.phar user create  "$WP_USER" "$WP_USER_EMAIL" \
 			 --allow-root \
 			 --user_pass="$WP_USER_PASS" \
 			 --role=randomuser
+		echo "User creation success..."
 	else
 		echo "Wordpress already exists."
 	fi
-	chmod o+w -R /var/www/html/wp-content
+	echo "Last chmod permission..."
+	chmod o+w -R /var/www/html
 	touch .firstmount
 fi
 
+echo "Running Wordpress..."
 exec php-fpm83 -F
