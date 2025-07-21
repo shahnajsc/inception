@@ -58,12 +58,12 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /Users/shahnaj/data/db
+      device: /home/shachowd/data/db
       o: bind
   wp:
     #name: WP_Volume
     driver: local
     driver_opts:
       type: none
-      device: /Users/shahnaj/data/wp
+      device: /home/shachowd/data/wp
       o: bind

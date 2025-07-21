@@ -1,4 +1,4 @@
-DATA_DIR			= /Users/shahnaj/data
+DATA_DIR			= /home/shachowd/data
 DB_DIR				= $(DATA_DIR)/db
 WP_DIR				= $(DATA_DIR)/wp
 
@@ -10,28 +10,28 @@ all: up
 
 mkdirs:
 	@mkdir -p $(DB_DIR) $(WP_DIR)
-	echo -e "$(PINK)Wordpress and MariaDB data directory created..$(RESET)"
+	@echo -e "$(PINK)Wordpress and MariaDB data directory created..$(RESET)"
 
 check:
-	command -v docker >/dev/null 2>&1 || { echo "$(RED)Docker is not installed.$(RESET)"; exit 1; }
-	command -v docker-compose >/dev/null 2>&1 || command -v docker >/dev/null 2>&1 || { echo "$(RED)Docker Compose is not installed.$(RESET)"; exit 1; }
-	echo -e "$(PINK)Docker and Docker Compose is available$(RESET)"
+	@command -v docker >/dev/null 2>&1 || { echo "$(RED)Docker is not installed.$(RESET)"; exit 1; }
+	@command -v docker-compose >/dev/null 2>&1 || command -v docker >/dev/null 2>&1 || { echo "$(RED)Docker Compose is not installed.$(RESET)"; exit 1; }
+	@echo -e "$(PINK)Docker and Docker Compose is available$(RESET)"
 
 up: mkdirs check
 	@$(D_COMPOSE) up --build -d
-	echo -e "$(GREEN)All services are up and running.$(RESET)"
+	@echo -e "$(GREEN)All services are up and running.$(RESET)"
 
 down:
 	$(D_COMPOSE) down
-	echo -e "$(RED)All services are stopped and removed.$(RESET)"
+	@echo -e "$(RED)All services are stopped and removed.$(RESET)"
 
 stop:
 	$(D_COMPOSE) stop
-	echo -e "$(RED)All services are stopped..$(RESET)"
+	@echo -e "$(RED)All services are stopped..$(RESET)"
 
 start:
 	$(D_COMPOSE) start
-	echo -e "$(GREEN)All services are running.$(RESET)"
+	@echo -e "$(GREEN)All services are running.$(RESET)"
 
 re: fclean all
 

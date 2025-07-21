@@ -28,7 +28,7 @@ echo "Got in to echo /var/www/html/..."
 
 if [ ! -e .firstmount ]; then
 	echo "Starting mariadb ping..."
-	mariadb-admin ping --protocol=tcp --host=mariadb -u$DB_USER -p$DB_PASS --wait >/dev/null 2>/dev/null
+	mariadb-admin ping --protocol=tcp --host="$DB_HOST" --user="$DB_USER" --password="$DB_PASS" --wait >/dev/null 2>&1
 
 	echo "Ping done..."
 	if [ ! -f wp-config.php ]; then
@@ -51,7 +51,7 @@ if [ ! -e .firstmount ]; then
 		./wp-cli.phar user create  "$WP_USER" "$WP_USER_EMAIL" \
 			 --allow-root \
 			 --user_pass="$WP_USER_PASS" \
-			 --role=randomuser
+			 --role=subscriber
 		echo "User creation success..."
 	else
 		echo "Wordpress already exists."

@@ -19,10 +19,12 @@ NGINX OPENSSL
 
 
 #Transfer files from local to remote host:
-	#- scp -P 4241 -r /home/tmenkovi/inception_eval tmenkovi@localhost:/home/shachowd/
+	#- scp -P 4241 -r /home/shachowd/inception shachowd@localhost:/home/shachowd/
 #Clean up Docker by stopping, removing, and deleting all containers, images, volumes and networks:
 	#- docker stop $(docker ps -qa); docker rm $(docker ps -qa);
-	#- docker rmi -f $(docker images -qa); docker volume rm $(docker volume ls -q); docker network rm $(docker network ls -q) 2>/dev/null
+	#- docker rmi -f $(docker images -qa);
+	#- docker volume rm $(docker volume ls -q);
+	#- docker network rm $(docker network ls -q) 2>/dev/null
 #View the whole Inception installation and configuration process with messages:
 	#-cd srcs
 	#- docker-compose up --build
