@@ -7,7 +7,7 @@ RUN apk update && \
 	mkdir -p /etc/nginx/ssl
 
 #Copy :: Copies config file and startup script into the image
-COPY conf/nginx.conf /etc/nginx/http.d/
+COPY conf/nginx.conf /etc/nginx/http.d/default.conf
 COPY tools/NXentrypoint.sh /usr/local/bin/
 
 #Port :: Allow external services to connect

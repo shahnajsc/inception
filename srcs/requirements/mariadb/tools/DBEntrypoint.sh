@@ -20,17 +20,17 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
 	mariadb-install-db --user=mysql --datadir=/var/lib/mysql
 fi
 
-mariadbd --user=mysql --bootstrap <<EOF
+mysqld --user=mysql --bootstrap <<EOF
 	USE mysql;
 	FLUSH PRIVILEGES;
 
 	CREATE DATABASE IF NOT EXISTS ${DB_NAME};
 
-	CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASS}';
-	GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'%' WITH GRANT OPTION;
+	CREATE USER IF NOT EXISTS ${DB_USER}@'%' IDENTIFIED BY '${DB_PASS}';
+	GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO ${DB_USER}@'%' WITH GRANT OPTION;
 
-	CREATE USER IF NOT EXISTS '${DB_ROOT_USER}'@'%' IDENTIFIED BY '${DB_ROOT_PASS}';
-	ALTER USER '${DB_ROOT_USER}'@'%' IDENTIFIED BY '${DB_ROOT_PASS}';
+	CREATE USER IF NOT EXISTS ${DB_ROOT_USER}@'%' IDENTIFIED BY '${DB_ROOT_PASS}';
+	ALTER USER ${DB_ROOT_USER}@'%' IDENTIFIED BY '${DB_ROOT_PASS}';
 
 	FLUSH PRIVILEGES;
 EOF
@@ -40,7 +40,8 @@ echo "Database initialization complete."
 
 # Start MariaDB in the foreground
 echo "Starting MariaDB server..."
-exec mariadbd --user=mysql --console
+exec mysqld --user=mysql
+#--console
 
 
 #ALTER USER ${MYSQL_ROOT_USER}@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';

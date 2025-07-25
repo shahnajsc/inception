@@ -26,28 +26,35 @@ echo "Data Availability check done..."
 cd /var/www/html
 echo "Got in to echo /var/www/html/..."
 
-if [ ! -e .firstmount ]; then
+MARKER=".initialized"
+
+if [ ! -e "${MARKER}" ]; then
 	echo "Starting mariadb ping..."
 	mariadb-admin ping --protocol=tcp --host="$DB_HOST" --user="$DB_USER" --password="$DB_PASS" --wait >/dev/null 2>&1
+	echo "Waiting for MariaDB at $DB_HOST..."
 
-	echo "Ping done..."
+	echo "MariaDB is up - continuing"
+
 	if [ ! -f wp-config.php ]; then
 		echo "wp-config creating..."
-		./wp-cli.phar core download --allow-root || true
+		./wp-cli.phar core download --allow-root --locale=en_US || true
+
 		./wp-cli.phar config create --allow-root \
-			--dbname="$DB_NAME" \
-			--dbuser="$DB_USER" \
-			--dbpass="$DB_PASS" \
-			--dbhost="$DB_HOST"
+			--dbname="${DB_NAME}" \
+			--dbuser="${DB_USER}" \
+			--dbpass="${DB_PASS}" \
+			--dbhost="${DB_HOST}"
 		echo "DB USSER Assigned..."
+
 		./wp-cli.phar core install --allow-root \
 			--skip-email \
-			--url="$DOMAIN_NAME" \
-			--title="$WP_TITLE" \
-			--admin_user="$WP_ADMIN_USER" \
-			--admin_password="$WP_ADMIN_PASS" \
-			--admin_email="$WP_ADMIN_EMAIL"
+			--url="${DOMAIN_NAME}" \
+			--title="${WP_TITLE}" \
+			--admin_user="${WP_ADMIN_USER}" \
+			--admin_password="${WP_ADMIN_PASS}" \
+			--admin_email="${WP_ADMIN_EMAIL}"
 		echo "other user creating..."
+
 		./wp-cli.phar user create  "$WP_USER" "$WP_USER_EMAIL" \
 			 --allow-root \
 			 --user_pass="$WP_USER_PASS" \
@@ -57,9 +64,13 @@ if [ ! -e .firstmount ]; then
 		echo "Wordpress already exists."
 	fi
 	echo "Last chmod permission..."
-	chmod o+w -R /var/www/html
-	touch .firstmount
+	#chmod o+w -R www-data:www-data /var/www/html
+	chmod o+w -R /var/www/html/wp-content
+	touch "${MARKER}"
+else
+	echo "Already Installled....."
 fi
 
 echo "Running Wordpress..."
-exec php-fpm83 -F
+exec php-fpm83 --nodaemonize
+#exec php-fpm83 -F

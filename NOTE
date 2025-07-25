@@ -86,3 +86,19 @@ NGINX OPENSSL
 	#- curl -k http://user.42.fr # should fail
 	#- curl -k https://user.42.fr # should display a html document
 	#- curl -v https://user.42.fr # display TLS info
+
+
+
+# docker exec -it mariadb_cont netstat -tuln | grep 3306
+# docker exec -it mariadb_cont netstat -tuln
+		#- tcp        0      0 0.0.0.0:3306   0.0.0.0:*     LISTEN
+# mysqladmin ping -h mariadb -u root -pYourRootPass
+
+
+##  ssh localhost -p 4241
+##  scp -P 4241 -r inception  shachowd@localhost:/home/shachowd/
+
+
+# ENGINX Error
+######## nginx: [warn] conflicting server name "" on 0.0.0.0:80, ignored
+

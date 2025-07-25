@@ -3,6 +3,9 @@
 
 # Basic Settings settings
 user					= mysql
+port					= 3306
+bind-address			= 0.0.0.0
+socket					= /run/mysqld/mysqld.sock
 pid-file				= /var/run/mysqld/mysqld.pid
 basedir					= /usr
 datadir					= /var/lib/mysql
@@ -11,10 +14,8 @@ lc-messages-dir			= /usr/share/mysql
 lc-messages				= en_US
 
 # Disable external file locking to improve performance
-skip-external-locking
+#skip-external-locking
 
-# Allow connections from all IPs
-bind-address			= 0.0.0.0
 
 # Enable user privilege checks
 skip-grant-tables		= 0
@@ -29,3 +30,7 @@ innodb_log_file_size	= 256M
 
 # Error Logs
 log_error				= /var/log/mysql/error.log
+
+# Client Settings
+[client]
+default-character-set    = utf8mb4

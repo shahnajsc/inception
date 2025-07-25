@@ -1,10 +1,12 @@
-DATA_DIR			= /home/shachowd/data
+DATA_DIR			= $(HOME)/data
 DB_DIR				= $(DATA_DIR)/db
 WP_DIR				= $(DATA_DIR)/wp
 
 DOCKER_COMPOSE_FILE	= ./srcs/docker-compose.yml
 ENV_FILE			= ./srcs/.env
 D_COMPOSE	= docker compose --env-file $(ENV_FILE) --file $(DOCKER_COMPOSE_FILE)
+
+.SILENT:
 
 all: up
 
@@ -13,8 +15,8 @@ mkdirs:
 	@echo -e "$(PINK)Wordpress and MariaDB data directory created..$(RESET)"
 
 check:
-	@command -v docker >/dev/null 2>&1 || { echo "$(RED)Docker is not installed.$(RESET)"; exit 1; }
-	@command -v docker-compose >/dev/null 2>&1 || command -v docker >/dev/null 2>&1 || { echo "$(RED)Docker Compose is not installed.$(RESET)"; exit 1; }
+	@command -v docker >/dev/null 2>&1 || { echo "$(RED)Docker is missing.$(RESET)"; exit 1; }
+	@command -v docker-compose >/dev/null 2>&1 || command -v docker >/dev/null 2>&1 || { echo "$(RED)Docker Compose is missing.$(RESET)"; exit 1; }
 	@echo -e "$(PINK)Docker and Docker Compose is available$(RESET)"
 
 up: mkdirs check
@@ -42,7 +44,8 @@ clean: down
 	@sudo rm -rf $(DATA_DIR)
 
 fclean: clean
-	docker system prune --all --volumes --force
+#docker system prune --all --volumes --force
+	$(D_COMPOSE) down -v --rmi all
 
 info:
 	@echo "===============================| IMAGES |==============================="

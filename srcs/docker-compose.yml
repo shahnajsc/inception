@@ -1,26 +1,24 @@
 services:
   mariadb:
-    container_name: mariadb_cont
+    container_name: mariadb
     image: mariadb:shachowd
     restart: always
     env_file: .env
     build:
-      context: ./requirements/mariadb/
+      context: ./requirements/mariadb
       dockerfile: Dockerfile
     volumes:
       - db:/var/lib/mysql
-    ports:
-      - "3306:3306"
     networks:
       - inception
 
   wordpress:
-    container_name: wordpress_cont
+    container_name: wordpress
     image: wordpress:shachowd
     restart: always
     env_file: .env
     build:
-      context: ./requirements/wordpress/
+      context: ./requirements/wordpress
       dockerfile: Dockerfile
     depends_on:
       - mariadb
@@ -30,27 +28,22 @@ services:
       - inception
 
   nginx:
-    container_name: nginx_cont
+    container_name: nginx
     image: nginx:shachowd
     restart: always
     env_file: .env
     build:
-      context: ./requirements/nginx/
+      context: ./requirements/nginx
       dockerfile: Dockerfile
     depends_on:
-      - mariadb
       - wordpress
+      - mariadb
     volumes:
-      - wp:/var/www/html
+      - wp:/var/www/html:ro
     ports:
       - "443:443"
     networks:
       - inception
-
-networks:
-  inception:
-    name: inception
-    driver: bridge
 
 volumes:
   db:
@@ -58,12 +51,17 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/shachowd/data/db
+      device: ${HOME}/data/db
       o: bind
   wp:
     #name: WP_Volume
     driver: local
     driver_opts:
       type: none
-      device: /home/shachowd/data/wp
+      device: ${HOME}/data/wp
       o: bind
+
+networks:
+  inception:
+    name: inception
+    driver: bridge

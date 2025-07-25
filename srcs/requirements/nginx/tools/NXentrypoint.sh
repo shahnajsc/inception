@@ -22,7 +22,7 @@ if [ ! -f /etc/nginx/ssl/cert.crt ] || [ ! -f /etc/nginx/ssl/cert.key ]; then
 else
 	echo "SSL certificate already exists."
 fi
-	echo "End of if."
+echo "End of if."
 # Setting read/write permission of key for owner
 chmod 600 /etc/nginx/ssl/cert.key
 echo "chmod 600 done."
@@ -33,3 +33,5 @@ echo "chmod 644 done."
 
 # Run NGINX in the foreground
 exec nginx -g "daemon off;"
+echo "NGINX up......"
+
