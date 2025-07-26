@@ -3,7 +3,7 @@
 # Exit immediately if a command exits with error (non-zero status)
 set -e
 
-echo "Starting MariaDB initialization script..."
+echo "Starting MariaDB Initialization Script..."
 
 # Ensure required environment variables are set
 : "${DB_NAME:?Environment variable DB_NAME is required}"
@@ -11,15 +11,16 @@ echo "Starting MariaDB initialization script..."
 : "${DB_PASS:?Environment variable DB_PASS is required}"
 : "${DB_ROOT_USER:?Environment variable DB_ROOT_USER is required}"
 : "${DB_ROOT_PASS:?Environment variable DB_ROOT_PASS is required}"
-
+echo "ENV Variables Check Done..."
 
 # Check if database is already initialized
 
 if [ ! -d "/var/lib/mysql/mysql" ]; then
-	echo "MariaDB not yet initialized. Bootstrapping database..."
+	echo "MariaDB Installing..."
 	mariadb-install-db --user=mysql --datadir=/var/lib/mysql
 fi
 
+echo "MariaDB Not Yet Initialized. Bootstrapping Database..."
 mysqld --user=mysql --bootstrap <<EOF
 	USE mysql;
 	FLUSH PRIVILEGES;
@@ -34,14 +35,8 @@ mysqld --user=mysql --bootstrap <<EOF
 
 	FLUSH PRIVILEGES;
 EOF
-
-echo "Database initialization complete."
-
+echo "Database Initialization Done..."
 
 # Start MariaDB in the foreground
-echo "Starting MariaDB server..."
+echo "Starting MariaDB Server..."
 exec mysqld --user=mysql
-#--console
-
-
-#ALTER USER ${MYSQL_ROOT_USER}@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';

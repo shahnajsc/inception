@@ -6,7 +6,6 @@ DOCKER_COMPOSE_FILE	= ./srcs/docker-compose.yml
 ENV_FILE			= ./srcs/.env
 D_COMPOSE	= docker compose --env-file $(ENV_FILE) --file $(DOCKER_COMPOSE_FILE)
 
-.SILENT:
 
 all: up
 
@@ -28,24 +27,23 @@ down:
 	@echo -e "$(RED)All services are stopped and removed.$(RESET)"
 
 stop:
-	$(D_COMPOSE) stop
+	@$(D_COMPOSE) stop
 	@echo -e "$(RED)All services are stopped..$(RESET)"
 
 start:
-	$(D_COMPOSE) start
+	@$(D_COMPOSE) start
 	@echo -e "$(GREEN)All services are running.$(RESET)"
 
 re: fclean all
 
 logs:
-	$(D_COMPOSE) logs --follow
+	@$(D_COMPOSE) logs --follow
 
 clean: down
 	@sudo rm -rf $(DATA_DIR)
 
 fclean: clean
-#docker system prune --all --volumes --force
-	$(D_COMPOSE) down -v --rmi all
+	@$(D_COMPOSE) down -v --rmi all
 
 info:
 	@echo "===============================| IMAGES |==============================="
@@ -66,5 +64,4 @@ GREEN		= \033[0;32m
 PINK		= \033[0;35m
 RESET		= \033[0;36m
 
-.PHONY : all up down stop start re logs clean fclean mkdirs
-
+.PHONY : all up down stop start re logs clean fclean mkdirs info

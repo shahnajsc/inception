@@ -47,14 +47,14 @@ services:
 
 volumes:
   db:
-    #name: DB_Volume
+    name: DB_Volume
     driver: local
     driver_opts:
       type: none
       device: ${HOME}/data/db
       o: bind
   wp:
-    #name: WP_Volume
+    name: WP_Volume
     driver: local
     driver_opts:
       type: none

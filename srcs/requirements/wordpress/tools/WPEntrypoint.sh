@@ -3,7 +3,7 @@
 # Exit immediately if a command exits with error (non-zero status)
 set -e
 
-echo "Starting Wordpress initialization script..."
+echo "Starting Wordpress Initialization Script..."
 
 # Ensure required environment variables are set
 : "${WP_TITLE:?Environment variable WP_TITLE is required}"
@@ -21,22 +21,18 @@ echo "Starting Wordpress initialization script..."
 : "${DB_USER:?Environment variable DB_USER is required}"
 : "${DB_PASS:?Environment variable DB_PASS is required}"
 
-echo "Data Availability check done..."
+echo "ENV Variables Check Done..."
 
 cd /var/www/html
-echo "Got in to echo /var/www/html/..."
 
-MARKER=".initialized"
+if [ ! -e ".initialized" ]; then
 
-if [ ! -e "${MARKER}" ]; then
-	echo "Starting mariadb ping..."
-	mariadb-admin ping --protocol=tcp --host="$DB_HOST" --user="$DB_USER" --password="$DB_PASS" --wait >/dev/null 2>&1
 	echo "Waiting for MariaDB at $DB_HOST..."
-
-	echo "MariaDB is up - continuing"
+	mariadb-admin ping --protocol=tcp --host="$DB_HOST" --user="$DB_USER" --password="$DB_PASS" --wait >/dev/null 2>&1
+	echo "Database $DB_NAME is Connected."
 
 	if [ ! -f wp-config.php ]; then
-		echo "wp-config creating..."
+		echo "Downloading Wordpress..."
 		./wp-cli.phar core download --allow-root --locale=en_US || true
 
 		./wp-cli.phar config create --allow-root \
@@ -44,7 +40,7 @@ if [ ! -e "${MARKER}" ]; then
 			--dbuser="${DB_USER}" \
 			--dbpass="${DB_PASS}" \
 			--dbhost="${DB_HOST}"
-		echo "DB USSER Assigned..."
+		echo "Wordpress Config Create Done..."
 
 		./wp-cli.phar core install --allow-root \
 			--skip-email \
@@ -53,24 +49,23 @@ if [ ! -e "${MARKER}" ]; then
 			--admin_user="${WP_ADMIN_USER}" \
 			--admin_password="${WP_ADMIN_PASS}" \
 			--admin_email="${WP_ADMIN_EMAIL}"
-		echo "other user creating..."
+		echo "Wordpress Core Installation and Admin User Creation Done..."
 
 		./wp-cli.phar user create  "$WP_USER" "$WP_USER_EMAIL" \
 			 --allow-root \
 			 --user_pass="$WP_USER_PASS" \
 			 --role=subscriber
-		echo "User creation success..."
+		echo "Additional User Creation Done..."
 	else
-		echo "Wordpress already exists."
+		echo "Wordpress Already Exists."
 	fi
-	echo "Last chmod permission..."
-	#chmod o+w -R www-data:www-data /var/www/html
+
 	chmod o+w -R /var/www/html/wp-content
-	touch "${MARKER}"
+	echo "Wordpress File Access Permission Done..."
+	touch ".initialized"
 else
-	echo "Already Installled....."
+	echo "Wordpress Already Installled....."
 fi
 
 echo "Running Wordpress..."
 exec php-fpm83 --nodaemonize
-#exec php-fpm83 -F

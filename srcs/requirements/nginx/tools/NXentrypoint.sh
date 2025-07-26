@@ -1,16 +1,19 @@
 #!/bin/sh
 
-# Exit immediately if a command exits with error (non-zero status)
+#Exit immediately if a command exits with error (non-zero status)
 set -e
 
-echo "Starting nginx initialization script..."
+echo "Starting nginx Initialization Script..."
 
-# Ensure required environment variables are set
+#Ensure required environment variables are set
 : "${DOMAIN_NAME:?Environment variable DOMAIN_NAME is required}"
 
-# OPEN SSL: Setting up Secure Sockets Layer(SSL) certificate
+echo "ENV Variables Check Done..."
+
+#OPEN SSL: Setting up Secure Sockets Layer(SSL) certificate
 if [ ! -f /etc/nginx/ssl/cert.crt ] || [ ! -f /etc/nginx/ssl/cert.key ]; then
-    echo "Generating new SSL certificate."
+    echo "Generating New SSL certificate..."
+
 	openssl req -x509 \
 		-days 365 \
 		-newkey rsa:2048 \
@@ -18,20 +21,17 @@ if [ ! -f /etc/nginx/ssl/cert.crt ] || [ ! -f /etc/nginx/ssl/cert.key ]; then
 		-keyout /etc/nginx/ssl/cert.key \
 		-out /etc/nginx/ssl/cert.crt \
 		-subj "/CN=$DOMAIN_NAME"
-		echo "Certificate generation done."
+	echo "SSL Certificate Generation Done..."
 else
-	echo "SSL certificate already exists."
+	echo "SSL Certificate Already Exists..."
 fi
-echo "End of if."
-# Setting read/write permission of key for owner
+#Setting read/write permission of key for owner
 chmod 600 /etc/nginx/ssl/cert.key
-echo "chmod 600 done."
 
-# # Setting read permission of sertificate for all
+#Setting read permission of certificate for all
 chmod 644 /etc/nginx/ssl/cert.crt
-echo "chmod 644 done."
+echo "SSL Certificate and Key File Permission Done..."
 
 # Run NGINX in the foreground
+echo "Starting nginx Server..."
 exec nginx -g "daemon off;"
-echo "NGINX up......"
-
