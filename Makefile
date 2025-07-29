@@ -22,7 +22,7 @@ up: mkdirs precheck
 	@echo -e "$(GREEN)All services are up and running.$(RESET)"
 
 down:
-	$(D_COMPOSE) down
+	@$(D_COMPOSE) down
 	@echo -e "$(PINK)All services are stopped and removed.$(RESET)"
 
 stop:
@@ -45,6 +45,7 @@ fclean: clean
 	@$(D_COMPOSE) down -v --rmi all
 
 info:
+	@echo
 	@echo "===============================| IMAGES |==============================="
 	@docker images
 	@echo
@@ -56,6 +57,7 @@ info:
 	@echo
 	@echo "======| VOLUMES |======"
 	@docker volume ls
+	@echo
 
 # color
 RED			= \033[0;31m

@@ -18,7 +18,7 @@
 #_______
 #Volume: docker volume ls / docker volume ls -q
 #Remove volume: docker volume rm $(docker volume ls -q);
-#Inspect: docker volume inspect volume-name
+#Inspect: docker volume inspect volume-namel
 #_______
 #Network: docker network ls -q
 #Remove networ: docker network rm $(docker network ls -q) 2>/dev/null
@@ -88,3 +88,14 @@
 
 # TLS1.3: [TLS]_[Encryption_Algo]_[Auth]: [TLS]_[AES_256_GCM]_[SHA384]
 # TLS1.2: [Key-Exhcnage]-[Encryption-Algo]-[Auth]: [ECDHE-RSA]-[AES256-GCM]-[SHA384]
+
+
+##########################################3
+
+openssl s_client -connect shachowd.42.fr
+curl -k https://shachowd.42.fr
+curl -v https://shachowd.42.fr
+
+NET:
+docker network ls
+docker network inspect inception
