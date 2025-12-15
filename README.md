@@ -10,18 +10,18 @@ The architecture includes:
 - **MariaDB** as the database engine
 - Docker volumes and networks for persistent and isolated infrastructure
 
-## 🧰 Tech Stack
+## Tech Stack
 
-- 🐳 Docker & Docker Compose
-- 🐧 Debian 11 "Bullseye" (penultimate stable)
-- 🌐 NGINX with TLSv1.2+ only
-- 🐘 PHP-FPM for WordPress
-- 🐬 MariaDB (no NGINX inside DB container)
-- 🔐 Self-signed SSL via OpenSSL
-- 🗃️ Volumes for data persistence
-- 🔄 Auto-restarting containers
+- Docker & Docker Compose
+- Debian 11 "Bullseye" (penultimate stable)
+- NGINX with TLSv1.2+ only
+- PHP-FPM for WordPress
+- MariaDB (no NGINX inside DB container)
+- Self-signed SSL via OpenSSL
+- Volumes for data persistence
+- Auto-restarting containers
 
-✅ Project Requirements Checklist
+Project Requirements Checklist
  - Custom Dockerfiles for each service (no image pulling except Alpine/Debian)
  - Use of Debian 11 as base image
  - Docker Compose setup via Makefile
@@ -35,13 +35,13 @@ The architecture includes:
  - .env file for config separation
  - No use of latest Docker tags
 
-## 🔐 Security Best Practices
+## Security Best Practices
 - No credentials hardcoded in Dockerfiles
 - Use .env + Docker secrets (optionally) to secure passwords
 - TLS enforced by NGINX (self-signed certs via OpenSSL)
 - Admin username restrictions for WordPress
 
-## 📁 Directory Structure
+## Directory Structure
 ```
 .
 ├── Makefile
@@ -62,8 +62,8 @@ The architecture includes:
     └── wp/        # Volume for WordPress files
 ```
 
-## 🚀 Setup Instructions
- ⚠️ All steps must be done inside a Debian VM (e.g., VirtualBox).
+## Setup Instructions
+ All steps must be done inside a Debian VM (e.g., VirtualBox).
  1. Clone the repository
 ```bash
 git clone .................
